@@ -52,46 +52,19 @@ public class CommunicationHandler implements Runnable {
     }
 
     public void run() {
+        while (true) {
         try {
 // HOW TO READ SIMPLE TEXT FROM SOCKET:
             String message;
             while ((message = reader.readLine()) != null) {
-                System.out.println("PictureChat CommunicationHandler: read " + message + ".");
+                System.out.println("chat CommunicationHandler: read " + message + ".");
             }
 
-//            byte[] sizeArray = new byte[4];
-//            int r;
-//            // Try reading from Socket until a new image's size+bytes appears
-//            while ((r = in.read(sizeArray)) > 0) {
-//                System.out.println("PictureChat CommunicationHandler: reading an image");
-//                // Read from socket the size of image
-//                int size = ByteBuffer.wrap(sizeArray).asIntBuffer().get();
-//                // Make a byte array for the image based on the size of the image
-//                byte[] imageArray = new byte[size];
-//                // Read from socket the image's bytes and turn them into an image
-//                r = in.read(imageArray);
-//                if (r > 0) {
-//                    Image newImage = SwingFXUtils.toFXImage(ImageIO.read(new ByteArrayInputStream(imageArray)), null);
-//                    System.out.println("PictureChat CommunicationHandler: read a " + size + " bytes image");
-//                    // Put the new image on to the GUI's inputQueue
-//                    while (!inputQueue.put(newImage)) {
-//                        Thread.currentThread().yield();
-//                    }
-//                } else {
-//                    System.out.println("PictureChat CommunicationHandler: read empty image?!?!");
-//                }
-//
-//                if (isServer) {
-//                    // TODO: relay image to all clients
-//                    //tellAllClients(message);
-//                }
-//            }
-//
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println("could not read");
         }
-
+    }
     }
 
     public void tellAllClients(String message) {

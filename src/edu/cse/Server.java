@@ -24,6 +24,7 @@ public class Server extends Application {
         Thread serverNetworkingThread = new Thread(serverNetworking);
         serverNetworkingThread.setName("serverNetworkingThread");
         serverNetworkingThread.start();
+        System.out.println("server networking thread started");
 
         // Start the Server's GUI thread
         Application.launch(args);
