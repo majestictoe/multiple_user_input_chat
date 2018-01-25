@@ -17,12 +17,17 @@ public class TextSender implements Runnable {
         while (true) {
             // Ask queue for an image to send
             String textToSend = "nothing yet";
-            while (outputQueue.getValues()!=null) {
-                while (outputQueue.getValues()[0] == null) {
+            String[] outputs;
+            outputs = outputQueue.getValues();
+            while (outputs==null) {
                     Thread.currentThread().yield();
-                    textToSend = outputQueue.getValues()[0];
-                }
+//                while (outputQueue.getValues()[0] == null) {
+//                    Thread.currentThread().yield();
+//                    textToSend = outputQueue.getValues()[0];
+//                }
+                outputs = outputQueue.getValues();
             }
+            textToSend = outputs[0];
             try {
 //                 HOW TO WRITE SIMPLE TEXT TO SOCKET:
                 writer.println(textToSend);
