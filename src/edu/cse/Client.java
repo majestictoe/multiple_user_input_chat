@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
 
 public final class Client extends Application {
     static BufferedReader reader;
@@ -14,10 +15,11 @@ public final class Client extends Application {
     static OutputStream out;
     static Queue inputQueue;
     static Queue outputQueue;
+    static Text yeah;
 
     @Override
     public void start(final Stage stage) {
-        GUI gui = new GUI("Client", inputQueue, outputQueue);
+        GUI gui = new GUI("Client", inputQueue, outputQueue, yeah);
         gui.setClientNetworking(reader, writer, out);
         gui.run(stage);
     }
@@ -38,9 +40,11 @@ public final class Client extends Application {
             inputQueue = new Queue();
             // outputQueue communicates images from GUI to Server
             outputQueue = new Queue();
+            yeah = new Text();
+            yeah.setText("test");
 
             // for every new client, run an IncomingDataReceiver on a new thread to receive data from it
-            CommunicationHandler handler = new CommunicationHandler(sock, inputQueue, reader);
+            CommunicationHandler handler = new CommunicationHandler(sock, inputQueue, reader, yeah);
             Thread handlerThread = new Thread(handler);
             handlerThread.start();
             System.out.println("client: created input communication handler");

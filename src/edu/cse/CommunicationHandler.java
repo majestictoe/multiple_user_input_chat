@@ -13,6 +13,10 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javax.imageio.ImageIO;
 
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import java.util.Random;
+
 // CommunicationHandler is a handler thread that reads input Images from a Socket and:
 //   1. Updates put the Image on the Chat app's input queue
 //   2. If it is the Chat server, send the Image to all Clients.
@@ -23,10 +27,14 @@ public class CommunicationHandler implements Runnable {
     private BufferedReader reader;
     private boolean isServer;
     private Queue inputQueue;
+    private Text outputBoi;
+    private boolean colorChanged = false;
 
-    public CommunicationHandler(Socket sock, Queue inQueue, ArrayList streams) {
+    public CommunicationHandler(Socket sock, Queue inQueue, ArrayList streams, Text output) {
+        //outputBoi = new Text();
         inputQueue = inQueue;
         isServer = true;
+        outputBoi = output;
         try {
             in = sock.getInputStream();
             InputStreamReader incomingDataReader = new InputStreamReader(in);
@@ -38,10 +46,11 @@ public class CommunicationHandler implements Runnable {
         }
     }
 
-    public CommunicationHandler(Socket sock, Queue inQueue, BufferedReader r) {
+    public CommunicationHandler(Socket sock, Queue inQueue, BufferedReader r, Text output) {
         isServer = false;
         reader = r;
         inputQueue = inQueue;
+        outputBoi = output;
         try {
             in = sock.getInputStream();
         } catch (Exception ex) {
@@ -52,13 +61,26 @@ public class CommunicationHandler implements Runnable {
     }
 
     public void run() {
+        System.out.println("running -I");
         while (true) {
+            System.out.println("running 0");
         try {
 // HOW TO READ SIMPLE TEXT FROM SOCKET:
+            System.out.println("running I");
             String message;
             while ((message = reader.readLine()) != null) {
+                System.out.println("running II");
                 System.out.println("chat CommunicationHandler: read " + message + ".");
+                if(message == "change+color"){
+                    if(colorChanged = false) {
+                        outputBoi.setFill(Color.FUCHSIA);
+                    }else{
+                        outputBoi.setFill(Color.BLACK);
+                    }
+                }
+                outputBoi.setText("You: " + message + "\n" + outputBoi.getText());
             }
+            System.out.println("chat CommunicationHandler: read HI.");
 
         } catch (Exception ex) {
             ex.printStackTrace();

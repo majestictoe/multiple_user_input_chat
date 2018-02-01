@@ -4,17 +4,21 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import javafx.scene.text.Text;
 
 public class ServerNetworking implements Runnable {
     private ArrayList clientOutputStreams;
     private int numOfClients = 1;
     private Queue inputQueue;
     private Queue outputQueue;
+    private Text ugh;
 
-    public ServerNetworking(Queue inQueue, Queue outQueue) {
+    public ServerNetworking(Queue inQueue, Queue outQueue, Text text) {
         clientOutputStreams = new ArrayList();
         inputQueue = inQueue;
         outputQueue = outQueue;
+        //ugh = new Text();
+        ugh = text;
     }
 
     public void run() {
@@ -28,7 +32,7 @@ public class ServerNetworking implements Runnable {
                 clientOutputStreams.add(writer);
 
                 // for every new client, run an IncomingDataReceiver on a new thread to receive data from it
-                CommunicationHandler handler = new CommunicationHandler(clientSocket, inputQueue, clientOutputStreams);
+                CommunicationHandler handler = new CommunicationHandler(clientSocket, inputQueue, clientOutputStreams, ugh);
                 Thread handlerThread = new Thread(handler);
                 handlerThread.setName("Server communication thread " + numOfClients);
                 handlerThread.start();

@@ -18,20 +18,21 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 public class GUI {
-    private Queue _inputQueue;
-    private Queue _outputQueue;
+    Queue _inputQueue;
+    Queue _outputQueue;
     private String _name;
-    private TextField _input;
-    private Text _text;
-    private ScrollPane _scroll;
+    TextField _input;
+    Text _text;
+    ScrollPane _scroll;
     private BufferedReader reader;
     private PrintWriter writer;
     private OutputStream out;
 
-    GUI(String s, Queue in, Queue out) {
+    GUI(String s, Queue in, Queue out, Text text) {
         _inputQueue = in;
         _outputQueue = out;
         _name = s;
+        _text = text;
     }
     public void run(final Stage stage){
         Thread.currentThread().setName("GUI Thread");
@@ -39,7 +40,7 @@ public class GUI {
         HBox prompt = new HBox();
         Button submit = new Button("Submit");
         VBox layout = new VBox();
-        _text = new Text();
+        //_text = new Text();
         _input = new TextField();
         prompt.setSpacing(10);
         layout.setSpacing(10);
