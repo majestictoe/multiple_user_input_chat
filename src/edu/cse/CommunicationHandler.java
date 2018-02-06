@@ -81,6 +81,7 @@ public class CommunicationHandler implements Runnable {
                 System.out.println("running II");
                 System.out.println("chat CommunicationHandler: read " + message + ".");
                 if(message.equals("+//command//+")){
+                    System.out.println("next message command");
                     nextMessageCommand = true;
                 }
                 if(nextMessageCommand) {
@@ -89,20 +90,20 @@ public class CommunicationHandler implements Runnable {
                         if (!colorChanged) {
                             System.out.println("change color");
                             outputBoi.setFill(Color.FUCHSIA);
-                            System.out.println("change color II");
                         } else {
                             System.out.println("change color back");
                             outputBoi.setFill(Color.BLACK);
-                            System.out.println("change color back II");
                         }
                         colorChanged = !colorChanged;
                         nextMessageCommand = false;
                     }
                     if (nextMessageName){
                         name = message;
+                        System.out.println("name:"+name);
                         nextMessageCommand = false;
                     }
                     if(message.equals("name")){
+                        System.out.println("change name");
                         nextMessageName = true;
                     }
                 }else{
