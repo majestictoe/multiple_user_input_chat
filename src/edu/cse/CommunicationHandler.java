@@ -28,7 +28,10 @@ public class CommunicationHandler implements Runnable {
     private boolean isServer;
     private Queue inputQueue;
     private Text outputBoi;
-    private boolean colorChanged = false;
+    private boolean colorChanged;
+    private boolean nextMessageCommand;
+    private boolean nextMessageName;
+    private String name;
 
     public CommunicationHandler(Socket sock, Queue inQueue, ArrayList streams, Text output) {
         //outputBoi = new Text();
@@ -44,6 +47,10 @@ public class CommunicationHandler implements Runnable {
             ex.printStackTrace();
             System.out.println("PictureChat CommunicationHandler: Server creation failed");
         }
+        colorChanged = false;
+        nextMessageCommand = false;
+        nextMessageName = false;
+        name = "Client";
     }
 
     public CommunicationHandler(Socket sock, Queue inQueue, BufferedReader r, Text output) {
@@ -57,7 +64,9 @@ public class CommunicationHandler implements Runnable {
             ex.printStackTrace();
             System.out.println("PictureChat CommunicationHandler: Client creation failed");
         }
-
+        colorChanged = false;
+        nextMessageCommand = false;
+        nextMessageName = false;
     }
 
     public void run() {
@@ -71,14 +80,35 @@ public class CommunicationHandler implements Runnable {
             while ((message = reader.readLine()) != null) {
                 System.out.println("running II");
                 System.out.println("chat CommunicationHandler: read " + message + ".");
-                if(message == "change+color"){
-                    if(colorChanged = false) {
-                        outputBoi.setFill(Color.FUCHSIA);
-                    }else{
-                        outputBoi.setFill(Color.BLACK);
-                    }
+                if(message.equals("+//command//+")){
+                    nextMessageCommand = true;
                 }
-                outputBoi.setText("You: " + message + "\n" + outputBoi.getText());
+                if(nextMessageCommand) {
+                    if (message.equals("color")) {
+                        System.out.println("message = color");
+                        if (!colorChanged) {
+                            System.out.println("change color");
+                            outputBoi.setFill(Color.FUCHSIA);
+                            System.out.println("change color II");
+                        } else {
+                            System.out.println("change color back");
+                            outputBoi.setFill(Color.BLACK);
+                            System.out.println("change color back II");
+                        }
+                        colorChanged = !colorChanged;
+                        nextMessageCommand = false;
+                    }
+                    if (nextMessageName){
+                        name = message;
+                        nextMessageCommand = false;
+                    }
+                    if(message.equals("name")){
+                        nextMessageName = true;
+                    }
+                }else{
+                    outputBoi.setText(name + ": " + message + "\n" + outputBoi.getText());
+                }
+                tellAllClients(message);
             }
             System.out.println("chat CommunicationHandler: read HI.");
 
