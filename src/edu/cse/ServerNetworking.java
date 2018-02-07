@@ -8,7 +8,7 @@ import javafx.scene.text.Text;
 
 public class ServerNetworking implements Runnable {
     private ArrayList clientOutputStreams;
-    private int numOfClients = 1;
+    private int numOfClients = 2;
     private Queue inputQueue;
     private Queue outputQueue;
     private Text ugh;

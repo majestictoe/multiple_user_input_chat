@@ -31,6 +31,7 @@ public class CommunicationHandler implements Runnable {
     private boolean colorChanged;
     private boolean nextMessageCommand;
     private boolean nextMessageName;
+    private boolean isClient;
     private String name;
 
     public CommunicationHandler(Socket sock, Queue inQueue, ArrayList streams, Text output) {
@@ -51,6 +52,7 @@ public class CommunicationHandler implements Runnable {
         nextMessageCommand = false;
         nextMessageName = false;
         name = "Client";
+        isClient = false;
     }
 
     public CommunicationHandler(Socket sock, Queue inQueue, BufferedReader r, Text output) {
@@ -67,6 +69,8 @@ public class CommunicationHandler implements Runnable {
         colorChanged = false;
         nextMessageCommand = false;
         nextMessageName = false;
+        name = "Client";
+        isClient = true;
     }
 
     public void run() {
@@ -101,6 +105,7 @@ public class CommunicationHandler implements Runnable {
                         name = message;
                         System.out.println("name:"+name);
                         nextMessageCommand = false;
+                        nextMessageName = false;
                     }
                     if(message.equals("name")){
                         System.out.println("change name");
